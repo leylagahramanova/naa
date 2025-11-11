@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './PostRow.css';
-import { ChevronDown, ChevronUp, Newspaper, Megaphone } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { SquarePen, Trash2 } from "lucide-react";
 
 interface Post {
