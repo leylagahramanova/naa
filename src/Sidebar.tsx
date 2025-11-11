@@ -43,9 +43,9 @@ const Sidebar: React.FC = () => {
 
           {naaWebsiteExpanded && (
             <div className="nav-submenu">
-              <button className="nav-submenu-item act">Post</button>
-              <button className="nav-submenu-item">Media Library</button>
-              <button className="nav-submenu-item">System Settings</button>
+              <div className="nav-submenu-item act">Post</div >
+              <div className="nav-submenu-item">Media Library</div >
+              <div  className="nav-submenu-item">System Settings</div >
             </div>
           )}
         </div>
