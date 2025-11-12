@@ -4,6 +4,7 @@ import az from "../img/az.png";
 import en from "../img/en.png";
 import upload from "../img/upload.png";
 import success from "../img/success.png";
+import {CircleX} from "lucide-react";
 interface Post {
   id?: number;
   thumbnail: string;
@@ -37,6 +38,7 @@ const PostModal: React.FC<PostModalProps> = ({ isOpen, onClose, onSave, post }) 
   const [step, setStep] = useState<number>(1);
   const [lang, setLang] = useState<'AZ' | 'EN'>('AZ');
   const [coverPreview, setCoverPreview] = useState<string>('');
+  const [coverName, setCoverName] = useState<string>('');
   const [galleryPreviews, setGalleryPreviews] = useState<string[]>([]);
   const [showSuccess, setShowSuccess] = useState<boolean>(false);
   const editorRef = React.useRef<HTMLDivElement>(null);
@@ -46,6 +48,7 @@ const PostModal: React.FC<PostModalProps> = ({ isOpen, onClose, onSave, post }) 
     if (post) {
       setFormData(post);
       setCoverPreview(post.thumbnail || '');
+      setCoverName(post.thumbnail ? 'Current cover' : '');
       setCategory(post.type);
     } else {
       setFormData({
@@ -57,6 +60,7 @@ const PostModal: React.FC<PostModalProps> = ({ isOpen, onClose, onSave, post }) 
         publishStatus: 'Publish',
       });
       setCoverPreview('');
+      setCoverName('');
       setCategory('');
     }
     setSlug('');
@@ -73,7 +77,14 @@ const PostModal: React.FC<PostModalProps> = ({ isOpen, onClose, onSave, post }) 
     if (!file) return;
     const url = URL.createObjectURL(file);
     setCoverPreview(url);
+    setCoverName(file.name);
     setFormData({ ...formData, thumbnail: url });
+  };
+
+  const handleCoverRemove = () => {
+    setCoverPreview('');
+    setCoverName('');
+    setFormData({ ...formData, thumbnail: '' });
   };
 
   const handleGalleryUpload = (files: FileList | null) => {
@@ -214,21 +225,36 @@ const PostModal: React.FC<PostModalProps> = ({ isOpen, onClose, onSave, post }) 
 
               <div className="form-group">
                 <label>Cover Image</label>
-                <div className={`upload-tile ${coverPreview ? 'has-image' : ''}`}>
-                  {coverPreview ? (
-                    <img src={coverPreview} alt="Cover" />
-                  ) : (
-                    <span className="upload-label">
-                      <img src={upload} alt="" />
-                      Upload Cover Image
-                    </span>
-                  )}
+                <div className="upload-tile">
+                  <span className="upload-label">
+                    <img src={upload} alt="" />
+                    Upload Cover Image
+                  </span>
                   <input
                     type="file"
                     accept="image/*"
                     onChange={(e) => handleCoverUpload(e.target.files ? e.target.files[0] : null)}
                   />
                 </div>
+                {coverPreview && (
+                  <div className="cover-preview">
+                    <div className="cover-preview-thumb">
+                      <img src={coverPreview} alt="Cover preview" />
+                    </div>
+                    <div className="cover-preview-info">
+                    
+                      <button
+                        type="button"
+                        className="cover-preview-remove"
+                        onClick={handleCoverRemove}
+                        aria-label="Remove cover image"
+                      >
+                        <span className="cover-preview-name">{coverName || 'Cover image'}</span>
+                        <CircleX />
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div className="form-group" id='html-content'>
